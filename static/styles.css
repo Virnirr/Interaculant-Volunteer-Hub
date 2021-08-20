@@ -1,0 +1,12 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: tisa;
+}
+
+@media only screen {
+    nav div ul {
+        text-align: center;
+    }
+}
