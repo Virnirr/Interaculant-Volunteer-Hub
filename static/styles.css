@@ -5,6 +5,32 @@
     font-family: tisa;
 }
 
+main .account 
+{
+    max-width: 500px;
+    height:auto;
+    margin:auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+main .form-control, main .btn
+{
+    border-radius: 25px;
+	box-shadow: 2px 2px 3px gray;
+    height: 50px;
+}
+
+main .error
+{
+    padding-left: 5px;
+    color:red;
+    display: none;
+}
+::placeholder
+{
+    font-size: 1rem;
+}
+
 @media only screen {
     nav div ul {
         text-align: center;
