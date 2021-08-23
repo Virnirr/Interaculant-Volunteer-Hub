@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="container p-5">
+            <div class="account p-3">
+                <div class="text-center">
+                    <h4 class="mt-3 text-dark">Welcome Back!</h4>
+                </div>
+                <form action="/login" method="post" onsubmit="return validate();">
+                    <div class= "form-group mb-3 mt-4">
+                        <input id="email" class="form-control" autocomplete="off" name="email" placeholder="Email Address" type="email">
+                    </div>
+                    <div class="error" id="email_confirmation">
+                        Email Missing
+                    </div>
+                    <div class= "form-group mb-3 mt-4">
+                        <input id="password" class="form-control" autocomplete="off" name="password" placeholder="Password" type="password">
+                    </div>
+                    <div class="error" id="password_confirmation">
+                        Password Missing
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="mb-3 mt-4 btn btn-primary btn-lg btn-block"><span style="font-size: 1rem;">Login</span></button>
+                    </div>
+                </form>
+                <hr>
+                <div class="text-center" style="margin-bottom: 30px;">
+                    <a class="medium" href="/register">Create an Account!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const e_error = document.getElementById('email');
+        const p_error = document.getElementById('password');
+
+        const e2 = document.getElementById('email_confirmation');
+        const e3 = document.getElementById('password_confirmation');
+        
+        function validate()
+        {
+            if(e_error.value != "")
+            {
+                e2.style.display="none";
+            }
+            if(p_error.value != "")
+            {
+                e3.style.display="none";
+            }
+            if(e_error.value == "" || e_error.value == null)
+            {
+                e2.style.display="block";
+                return false;
+            }
+            if (p_error.value == "" || p_error.value == null)
+            {
+                e3.style.display="block";
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    </script>
+{% endblock %}

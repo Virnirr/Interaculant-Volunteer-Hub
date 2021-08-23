@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <header class="background_image">
+        <div class="container">
+            <div class="text-title">
+                <p class="Welcome-text">Change Your Community</p>
+                <p class="Welcome-text">Change The World</p>
+                <p class="Company-name">Interaculant</p>
+                <a class="btn btn-primary" href="/register" style="width:150px; font-size: 20px;">
+                    Sign Up!
+                </a>
+            </div>
+        </div>
+    </header>
+    <section class="features-icons bg-light">
+        <div class="container">
+            <div class="flexbox-container">
+                <div class="flexbox-item">
+                    <div>
+                        <img style="width: 100%; height: 200px;" src="/static/image/Empower.jpg" alt="Community"/>
+                    </div>
+                    <div class="box-text">
+                        We empower and courage leadership who are confident in their visions.
+                    </div>
+                </div>
+                <div class="flexbox-item">
+                    <div>
+                        <img style="width: 100%; height: 200px;" src="/static/image/Community.png" alt="Community"/>
+                    </div>
+                    <div class="box-text">
+                        We strive to bring everyone to help their community and the world.
+                    </div>
+                </div>
+                <div class="flexbox-item">
+                    <div>
+                        <img style="width:100%; height: 200px;" src="/static/image/Educate.jpg" alt="Community"/>
+                    </div>
+                    <div class="box-text">
+                        We seek to educate all community and the world about different problems and how to efficiently combat them.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section>
+        <div class="jumbotron" style="background-color: white; padding: 50px;">
+            <div class="container">
+                <h1 class="display-4">My Story</h1>
+                <p class="lead" style="background-color: white; text-align:justify;">
+                    Inspired by the international organization "Interact," I founded Interaculant with
+                    the goal to combat different world problems through the use of Volunteer Services 
+                    and events. Through my journey of volunteering in multiple organizations, I discovered
+                    many underlying problems in our society including world hunger, violence, and 
+                    social ineqality. I strive to make this world a better place than I found to be with the
+                    use of empowering new young leaders, creating volunteer services, and educate young generations.
+                </p>
+              </div>
+        </div>
+    </section>
+    <hr>
+{% endblock %}
