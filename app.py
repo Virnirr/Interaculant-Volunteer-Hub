@@ -65,7 +65,7 @@ def login():
 
         # Redirect user to home page
         flash("Login Successfully!", "info")
-        return redirect("/")
+        return redirect("/services")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -141,3 +141,27 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
+
+@app.route("/services", methods=["GET", "POST"])
+def services():
+
+    if request.method == "POST":
+        # do something
+        return redirect ("/")
+    else:
+        return render_template("services.html")
+
+@app.route("/create_service", methods=["GET", "POST"])
+def create_service():
+
+    if request.method == "POST":
+        # do something
+        return redirect ("/")
+    
+    else:
+        themes = [
+            "Celebration",
+            "Foodie",
+            "Education"
+        ]
+        return render_template("create_service.html", themes=themes)

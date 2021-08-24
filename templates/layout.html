@@ -21,7 +21,9 @@
     <!-- Style Sheet -->
     <link href="/static/login_register.css" rel="stylesheet">
     <link href="/static/landing.css" rel="stylesheet">
-
+    <link href="/static/services.css" rel="stylesheet">
+    <link href="/static/contact.css" rel="stylesheet">
+    <link href="/static/create_service.css" rel="stylesheet">
     <!-- Title -->
     <title>Interaculant - {% block title %}{% endblock %}</title>
 
@@ -32,9 +34,8 @@
 <body>
     <!-- Nav Bar-->
     <nav class="navbar navbar-expand-md navbar-light bg-light border">
-        
         <div class="container">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/services">
                 <img style="height: 50px; width: 50px; border-radius: 50%;"src="/static/image/Volunteer_Connection.jpg" alt="volunteer"/>
                 <span style="padding: 20px; font-family: 'Raleway', sans-serif; font-size: 20px;">Interaculant</span>
             </a>
@@ -47,9 +48,9 @@
                 
                 {% if session.user_id %}
                 <ul class="navbar-nav ml-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-                </ul>
+                    <li class="nav-item"><a class="nav-link" href="/services">Services + Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/create_service">Create Service</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                 {% else %}
                 <ul class="navbar-nav ml-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>

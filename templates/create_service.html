@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Create Services & Events
+{% endblock %}
+
+{% block main %}
+    <header class="jumbotron" style="background-color: lightskyblue; padding: 50px; margin-bottom:0px;">
+        <div class="container text-center">
+            <h1 class="display-3">Create Service</h1>
+        </div>
+    </header>
+    <section class="features-icons bg-light">
+        <div class="container create_events">
+            
+            <form action="/services" method="post">
+                <select name="event-theme" class="form-control mb-3" required>
+                    <option class="form-control" disabled selected value="">Theme</option>
+                    {% for events in themes %}
+                        <option class="form-control" value="{{events}}">{{events}}</option>
+                    {% endfor %}
+                </select>
+                <div class= "form-group mb-3">
+                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                </div>
+                <div class= "form-group mb-3">
+                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                </div>
+                <div class= "form-group mb-3">
+                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                </div>
+                <div class= "form-group mb-3">
+                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                </div>
+                <div class= "form-group mb-3 mt-4">
+                    <textarea style="height: 150px; overflow-y: auto;" class="form-control" autocomplete="off" name="message" placeholder="Message" type="text"></textarea>
+                </div>
+                <div class= "form-group">
+                    <button type="submit" style=" width: 200px; margin: auto;" class="mb-3 mt-4 btn btn-primary btn-lg btn-block"><span style="font-size: 1rem;">Contact</span></button>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

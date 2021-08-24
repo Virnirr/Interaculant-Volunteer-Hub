@@ -7,7 +7,6 @@ main .background_image
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-
 }
 
 main .text-title
@@ -49,15 +48,13 @@ main .flexbox-item {
     width: 400px;
     height: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    height: auto;
 }
 
 main .box-text 
 {
-    text-align:justify;
+    text-align: justify;
     padding: 25px;
     height: auto;
-
 }
 
 @media only screen and (max-width: 1200px) 
