@@ -1,11 +1,7 @@
-import sqlite3
+from datetime import datetime
 
-from helper import dict_factory
+curr = datetime.now()
 
-con = sqlite3.connect("volunteer.db")
-con.row_factory = dict_factory
-cur = con.cursor()
+req_format = datetime.strftime(curr, "%m/%d/%Y")
 
-rows=cur.execute("SELECT * FROM users").fetchall()
-
-print(rows)
+print(curr)

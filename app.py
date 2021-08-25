@@ -7,7 +7,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helper import dict_factory
+from helper import dict_factory, login_required
 # My app
 app = Flask(__name__)
 
@@ -63,8 +63,18 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
+        con = sqlite3.connect("volunteer.db")
+        con.row_factory = dict_factory
+        db = con.cursor()
+
+        rows1 = db.execute("SELECT username FROM users WHERE id=?", [session["user_id"]]).fetchall()
+
         # Redirect user to home page
-        flash("Login Successfully!", "info")
+        flash("Login Successfully! Welcome " + rows1[0]['username'], "info")
+        
+        con.commit()
+        con.close()
+
         return redirect("/services")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -143,21 +153,59 @@ def register():
         return render_template("register.html")
 
 @app.route("/services", methods=["GET", "POST"])
+@login_required
 def services():
 
-    if request.method == "POST":
-        # do something
-        return redirect ("/")
-    else:
-        return render_template("services.html")
+    con = sqlite3.connect("volunteer.db")
+    con.row_factory = dict_factory
+    db = con.cursor()
+
+    services = db.execute("SELECT * FROM services").fetchall()
+    
+    con.commit()
+    con.close()
+
+    return render_template("services.html", services=services)
+
 
 @app.route("/create_service", methods=["GET", "POST"])
+@login_required
 def create_service():
 
+    # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        # do something
-        return redirect ("/")
-    
+        
+        # ALl input datas
+        event_themes = request.form.get("event-theme")
+        event_title = request.form.get("event_title")
+        event_date = datetime.strptime(request.form.get("event_date"), '%Y-%m-%d').strftime('%A, %m/%d/%Y')
+        start_time = datetime.strptime(request.form.get("start_time"), '%H:%M').strftime('%I:%M %p')
+        end_time = datetime.strptime(request.form.get("end_time"), '%H:%M').strftime('%I:%M %p')
+        event_location = request.form.get("location")
+        total_volunteer = request.form.get("total_volunteer")
+        instructions = request.form.get("instructions")
+        
+        # Database Query
+        con = sqlite3.connect("volunteer.db")
+        con.row_factory = dict_factory
+        db = con.cursor()
+
+        user_username = db.execute("SELECT username FROM users WHERE id =?", [session["user_id"]]).fetchall()
+        user_email = db.execute("SELECT email FROM users WHERE id =?", [session["user_id"]]).fetchall()
+        
+        u_name= user_username[0]["username"]
+        u_email =  user_email[0]["email"]
+
+        # Insert all the data from the form into services database
+        db.execute("INSERT INTO services (user_id, theme, title, host_username, host_email, date, start_time, end_time, location, total_volunteer, available, instruction) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        (session['user_id'], event_themes, event_title, u_name, u_email, event_date, start_time, end_time, event_location, total_volunteer, total_volunteer, instructions))
+        
+        con.commit()
+        con.close()
+        # Redirect to services page
+        return redirect ("/services")
+ 
+    # User reached route via GET (as by clicking a link or via redirect)
     else:
         themes = [
             "Celebration",

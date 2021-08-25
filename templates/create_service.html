@@ -13,30 +13,44 @@
     <section class="features-icons bg-light">
         <div class="container create_events">
             
-            <form action="/services" method="post">
-                <select name="event-theme" class="form-control mb-3" required>
+            <form action="/create_service" method="post">
+                <label for="themes">Select a Theme</label>
+                <select id="themes" name="event-theme" class="form-control mb-5" required>
                     <option class="form-control" disabled selected value="">Theme</option>
                     {% for events in themes %}
                         <option class="form-control" value="{{events}}">{{events}}</option>
                     {% endfor %}
                 </select>
-                <div class= "form-group mb-3">
+                <div id="event_title" class= "form-group mb-3">
+                    <label for="event_title">Event Title:</label>
                     <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
                 </div>
                 <div class= "form-group mb-3">
-                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                    <label for="event_date">Event Date:</label>
+                    <input id="event_date" class="form-control" autocomplete="off" name="event_date" placeholder="Event Title" type="date" required/>
                 </div>
                 <div class= "form-group mb-3">
-                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                    <label for="start_time">Start Time:</label>
+                    <input id="start_time" class="form-control" autocomplete="off" name="start_time" placeholder="start_time" type="time" required/>
                 </div>
                 <div class= "form-group mb-3">
-                    <input class="form-control" autocomplete="off" name="event_title" placeholder="Event Title" type="text" required/>
+                    <label for="end_time">Start Time:</label>
+                    <input id="end_time" class="form-control" autocomplete="off" name="end_time" placeholder="end_time" type="time" required/>
+                </div>
+                <div class= "form-group mb-3">
+                    <label for="location">Location:</label>
+                    <input id="location" class="form-control" autocomplete="off" name="location" placeholder="Address" type="text" required/>
+                </div>
+                <div class= "form-group mb-3">
+                    <label for="total_volunteer">Total Volunteer:</label>
+                    <input id="total_volunteer" class="form-control" autocomplete="off" name="total_volunteer" placeholder="Total Volunteer Needed" type="number" required/>
                 </div>
                 <div class= "form-group mb-3 mt-4">
-                    <textarea style="height: 150px; overflow-y: auto;" class="form-control" autocomplete="off" name="message" placeholder="Message" type="text"></textarea>
+                    <label for="instruction">Instructions:</label>
+                    <textarea id="instruction" style="height: 150px; overflow-y: auto;" class="form-control" autocomplete="off" name="instructions" placeholder="Instructions" type="text"></textarea>
                 </div>
                 <div class= "form-group">
-                    <button type="submit" style=" width: 200px; margin: auto;" class="mb-3 mt-4 btn btn-primary btn-lg btn-block"><span style="font-size: 1rem;">Contact</span></button>
+                    <button type="submit" style=" width: 200px; margin: auto;" class="mb-3 mt-4 btn btn-outline-primary btn-lg btn-block"><span style="font-size: 1rem;">Post Service</span></button>
                 </div>
             </form>
         </div>

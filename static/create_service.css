@@ -2,6 +2,5 @@ main .create_events .form-control, main .create_events .btn
 {
 	box-shadow: 2px 2px 3px gray;
     height: 50px;
-    margin-top: 50px;
     margin-bottom: 50px;
 }
