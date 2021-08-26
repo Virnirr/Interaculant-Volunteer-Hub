@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3.dbapi2 import Timestamp
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -166,6 +166,28 @@ def services():
     con.close()
 
     return render_template("services.html", services=services)
+
+@app.route("/availability", methods= ["POST"])
+@login_required
+def availability():
+
+    spots = request.get_json()[0]['spots']
+    service_id = request.get_json()[1]['server_id']
+
+    con = sqlite3.connect("volunteer.db")
+    db = con.cursor()
+
+
+    try:
+        db.execute("UPDATE services SET available=? WHERE id=?", (spots, service_id))
+        results = {'processed': 'true'}
+    except:
+        results = {'processed': 'false'}
+        
+    con.commit()
+    con.close()
+    flash("Signed up Successfull!", "info")
+    return jsonify(results)
 
 
 @app.route("/create_service", methods=["GET", "POST"])

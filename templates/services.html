@@ -92,7 +92,7 @@
                                             Needed Volunteer: {{service.total_volunteer}}
                                         </li>
                                         <li>
-                                            Available Spots: {{service.available}}
+                                            Available Spots: <span id='{{service.id}}'>{{service.available}}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -111,9 +111,43 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div style="margin: auto;">
+                                <button type="button" class="btn btn-outline-danger" onclick="availability('{{service.id}}')">Sign Up</button>
+                            </div>
                         </div>
                     </div>
             {% endfor %}
         </div>
     </section>
+    <script>
+        function availability(id)
+        {
+            var spots = document.getElementById(id);
+            var avail = parseInt(spots.innerHTML) - 1;
+
+            var server_data = [
+                {"spots": avail},
+                {"server_id": id}
+            ];
+
+
+            $.ajax({
+                type: "POST",
+                url: "/availability",
+                data: JSON.stringify(server_data),
+                contentType: "application/json",
+                dataType: 'json',   
+                success: function (result) {
+                    if(result.processed === "true") {
+                        window.location.reload(true);
+                        btn_id = "#" + id
+                        $(btn_id).html(avail);
+                        $(document).ready(function(){
+                            $(window).scrollTop(0);
+                        });
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}
