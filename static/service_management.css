@@ -1,0 +1,10 @@
+main .service-box-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main .service-box-item-time
+{
+    font-size: 20px;
+}

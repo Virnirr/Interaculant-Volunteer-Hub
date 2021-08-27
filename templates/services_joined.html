@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Services Signed Up
+{% endblock %}
+
+{% block main %}
+<header class="service-title">
+    <div class="service-text display-4">
+        <span>SERVICES JOINED</span>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Start_Time</th>
+                <th scope="col">End_Time</th>
+                <th scope="col">Location</th>
+            </thead>
+            {% for join in joined %}
+                <tbody>
+                    <td scope="col">{{join.title}}</td>
+                    <td scope="col">{{join.date}}</td>
+                    <td scope="col">{{join.start_time}}</td>
+                    <td scope="col">{{join.end_time}}</td>
+                    <td scope="col">{{join.location}}</td>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</section>
+{% endblock %}

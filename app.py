@@ -167,29 +167,6 @@ def services():
 
     return render_template("services.html", services=services)
 
-@app.route("/availability", methods= ["POST"])
-@login_required
-def availability():
-
-    spots = request.get_json()[0]['spots']
-    service_id = request.get_json()[1]['server_id']
-
-    con = sqlite3.connect("volunteer.db")
-    db = con.cursor()
-
-
-    try:
-        db.execute("UPDATE services SET available=? WHERE id=?", (spots, service_id))
-        results = {'processed': 'true'}
-    except:
-        results = {'processed': 'false'}
-        
-    con.commit()
-    con.close()
-    flash("Signed up Successfull!", "info")
-    return jsonify(results)
-
-
 @app.route("/create_service", methods=["GET", "POST"])
 @login_required
 def create_service():
@@ -225,6 +202,7 @@ def create_service():
         con.commit()
         con.close()
         # Redirect to services page
+        flash("Service Successfully Made!", "success")
         return redirect ("/services")
  
     # User reached route via GET (as by clicking a link or via redirect)
@@ -235,3 +213,85 @@ def create_service():
             "Education"
         ]
         return render_template("create_service.html", themes=themes)
+
+@app.route("/availability", methods= ["POST"])
+@login_required
+def availability():
+
+    spots = request.get_json()[0]['spots']
+    sev_id = request.get_json()[0]['server_id']
+
+    con = sqlite3.connect("volunteer.db")
+    con.row_factory = dict_factory
+    db = con.cursor()
+
+    volunteer = db.execute("SELECT services_id FROM volunteers WHERE user_id = ? AND services_id=?", (session["user_id"], sev_id)).fetchall()
+
+    if len(volunteer) != 0:
+        con.close()
+        flash("Already Signed Up for that Service", "danger")
+        results = {'processed': 'false'}
+        return jsonify(results)
+
+    user_username = db.execute("SELECT username FROM users WHERE id =?", [session["user_id"]]).fetchall()
+    user_email = db.execute("SELECT email FROM users WHERE id =?", [session["user_id"]]).fetchall()
+    service_title = db.execute("SELECT title FROM services WHERE id=?", (sev_id)).fetchall()
+    service_date = db.execute("SELECT date FROM services WHERE id=?", (sev_id)).fetchall()
+    service_start = db.execute("SELECT start_time FROM services WHERE id=?", (sev_id)).fetchall()
+    service_end = db.execute("SELECT end_time FROM services WHERE id=?", (sev_id)).fetchall()
+    service_location = db.execute("SELECT location FROM services WHERE id=?", (sev_id)).fetchall()
+        
+    u_name = user_username[0]["username"]
+    u_email =  user_email[0]["email"]
+    sev_title = service_title[0]["title"]
+    sev_date = service_date[0]["date"]
+    sev_start = service_start[0]["start_time"]
+    sev_end = service_end[0]["end_time"]
+    sev_location = service_location[0]["location"]
+
+    try:
+        db.execute("INSERT INTO volunteers (services_id, user_id, volunteer_username, volunteer_email, title, date, start_time, end_time, location) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? )",
+                    (sev_id, session["user_id"], u_name, u_email, sev_title, sev_date, sev_start, sev_end, sev_location))
+        db.execute("UPDATE services SET available=? WHERE id=?", (spots, sev_id))
+        results = {'processed': 'true'}
+        flash("Signed up Successfull!", "success")
+    except:
+        flash("Something went wrong", "danger")
+        results = {'processed': 'false'}
+        
+    con.commit()
+    con.close()
+
+    return jsonify(results)
+
+@app.route("/service_management", methods = ["GET"])
+@login_required
+def service_management():
+
+    con = sqlite3.connect("volunteer.db")
+    con.row_factory = dict_factory
+    db = con.cursor()
+
+    services_created = db.execute("SELECT id, title, date, start_time, end_time, location, total_volunteer, available FROM services WHERE user_id = ?", [session["user_id"]]).fetchall()
+    volunteer = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers WHERE user_id = ?", [session["user_id"]]).fetchall()
+
+    con.commit()
+    con.close()
+
+    return render_template("service_management.html", services_created = services_created, volunteers = volunteer)
+
+
+@app.route("/service_joined", methods=["GET"])
+@login_required
+def service_joined():
+
+    con = sqlite3.connect("volunteer.db")
+    con.row_factory = dict_factory
+    db = con.cursor()
+
+    joined = db.execute("SELECT title, date, start_time, end_time, location from volunteers WHERE user_id =?", [session["user_id"]]).fetchall()
+ 
+    con.commit()
+    con.close()
+
+    return render_template("services_joined.html", joined = joined)

@@ -111,8 +111,8 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div style="margin: auto;">
-                                <button type="button" class="btn btn-outline-danger" onclick="availability('{{service.id}}')">Sign Up</button>
+                            <div style="max-width: 130px; margin:auto;">
+                                <button style="padding-right: 20px; padding-left: 20px; font-size:25px; border-radius: 15px; box-shadow:3px 2px 3px red;" type="button" class="btn btn-outline-danger" onclick="availability('{{service.id}}')">Sign Up</button>
                             </div>
                         </div>
                     </div>
@@ -126,8 +126,7 @@
             var avail = parseInt(spots.innerHTML) - 1;
 
             var server_data = [
-                {"spots": avail},
-                {"server_id": id}
+                {"spots": avail, "server_id": id}
             ];
 
 
@@ -142,6 +141,13 @@
                         window.location.reload(true);
                         btn_id = "#" + id
                         $(btn_id).html(avail);
+                        $(document).ready(function(){
+                            $(window).scrollTop(0);
+                        });
+                    }
+
+                    else if(result.processed === "false") {
+                        window.location.reload(true);
                         $(document).ready(function(){
                             $(window).scrollTop(0);
                         });

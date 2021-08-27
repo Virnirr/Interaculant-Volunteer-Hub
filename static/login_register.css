@@ -5,6 +5,12 @@
     font-family: tisa;
 }
 
+.navbar .nav-item .nav-link
+{
+    padding-right: 20px;
+    padding-left: 20px
+}
+
 main .account 
 {
     max-width: 500px;

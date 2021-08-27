@@ -40,6 +40,7 @@ main .service-events
     background-color: rgba(255, 255, 255, 0.9);
     max-width: 900px;
     margin: auto;
+    padding-bottom: 40px;
 }
 
 main .service-events-title
@@ -59,6 +60,8 @@ main .service-events-info-timestamp
     font-weight: 700;
     color: #207EA9;
     margin-left: 5%;
+    max-width: 800px;
+    text-align:justify;
 }
 
 main .service-events-information
