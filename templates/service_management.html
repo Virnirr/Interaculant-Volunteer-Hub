@@ -65,24 +65,16 @@
                                 <th scope="col" colspan="6" style="text-align: center;">Volunteers</th>
                             </tr>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Email</th>
+                                    <th scope="col" colspan="4" style="text-align: center;">Username</th>
+                                    <th scope="col" colspan="2" style="text-align: center;">Email</th>
                                 </tr>
                         </thead>
                         <tbody>
                             {% for volunteer in volunteers %}
                                 {% if service.id == volunteer.services_id %}
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{volunteer.volunteer_username}}</td>
-                                        <td>{{volunteer.volunteer_email}}</td>
+                                        <td colspan="4" style="text-align: center;">{{volunteer.volunteer_username}}</td>
+                                        <td colspan="2" style="text-align: center;">{{volunteer.volunteer_email}}</td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}

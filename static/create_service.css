@@ -4,3 +4,32 @@ main .create_events .form-control, main .create_events .btn
     height: 50px;
     margin-bottom: 50px;
 }
+
+main .flex-time
+{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+main .timme
+{
+    padding: 10px;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+@media screen and (max-width: 515px)
+{
+    main .flex-time{
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+    }
+
+    main .timme
+    {
+        width: 100%;
+        padding: 0px;
+    }
+}

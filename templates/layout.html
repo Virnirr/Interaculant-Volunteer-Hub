@@ -41,7 +41,17 @@
     <!-- Nav Bar-->
     <nav class="navbar navbar-expand-md navbar-light bg-light border">
         <div class="container">
-            
+            {% if session.user_id %}
+                <a class="navbar-brand" href="/services">
+                    <img style="height: 50px; width: 50px; border-radius: 50%;"src="/static/image/Volunteer_Connection.jpg" alt="volunteer"/>
+                    <span style="padding: 20px; font-family: 'Raleway', sans-serif; font-size: 20px;">Interaculant</span>
+                </a>
+            {% else %}
+                <a class="navbar-brand" href="/">
+                    <img style="height: 50px; width: 50px; border-radius: 50%;"src="/static/image/Volunteer_Connection.jpg" alt="volunteer"/>
+                    <span style="padding: 20px; font-family: 'Raleway', sans-serif; font-size: 20px;">Interaculant</span>
+                </a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -49,10 +59,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 
                 {% if session.user_id %}
-                <a class="navbar-brand" href="/services">
-                    <img style="height: 50px; width: 50px; border-radius: 50%;"src="/static/image/Volunteer_Connection.jpg" alt="volunteer"/>
-                    <span style="padding: 20px; font-family: 'Raleway', sans-serif; font-size: 20px;">Interaculant</span>
-                </a>
                 <ul class="navbar-nav ml-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/services">Services + Events</a></li>
                     <li class="nav-item"><a class="nav-link" href="/create_service">Create Service</a></li>
@@ -61,10 +67,6 @@
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 {% else %}
-                <a class="navbar-brand" href="/">
-                    <img style="height: 50px; width: 50px; border-radius: 50%;"src="/static/image/Volunteer_Connection.jpg" alt="volunteer"/>
-                    <span style="padding: 20px; font-family: 'Raleway', sans-serif; font-size: 20px;">Interaculant</span>
-                </a>
                 <ul class="navbar-nav ml-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
