@@ -14,11 +14,12 @@
     <div class="container">
         <table class="table table-striped">
             <thead>
-                <th scope="col">Title</th>
-                <th scope="col">Date</th>
-                <th scope="col">Start_Time</th>
-                <th scope="col">End_Time</th>
+                <th scope="col">Service Name</th>
+                <th scope="col">Service DateDate</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
                 <th scope="col">Location</th>
+                <th scope="col"></th>
             </thead>
             {% for join in joined %}
                 <tbody>
@@ -27,9 +28,33 @@
                     <td scope="col">{{join.start_time}}</td>
                     <td scope="col">{{join.end_time}}</td>
                     <td scope="col">{{join.location}}</td>
+                    <td scope="col"><button style="border-radius: 15px; box-shadow:3px 2px 3px red;" type="button" class="btn btn-outline-danger" onclick="remove('{{join.services_id}}', '{{join.user_id}}')">Remove</button></td>
                 </tbody>
             {% endfor %}
         </table>
     </div>
 </section>
+<script>
+    function remove(service_id, user_id)
+    {
+        var service_remove = [
+            {"service_id": service_id, "user_id": user_id}
+        ];
+        $.ajax ({
+            type: "POST",
+            url: "/service_joined",
+            data: JSON.stringify(service_remove),
+            contentType: "application/json",
+            dataType: 'json',  
+            success: function (result) {
+                if(result.processed === "true") {
+                    window.location.reload(true);
+                    $(document).ready(function(){
+                    $(window).scrollTop(0);
+                    });
+                }
+            }
+        });
+    }
+</script>
 {% endblock %}

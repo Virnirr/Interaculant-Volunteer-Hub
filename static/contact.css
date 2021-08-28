@@ -1,5 +1,73 @@
 main .contact .form-control, main .contact .btn
 {
-	box-shadow: 2px 2px 3px gray;
-    height: 50px;
+    height: 40px;
+    max-width: 350px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+main  .contact input[type="text"],  .contact input[type="email"]{
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid lightblue;
+}
+
+main .contact input[type="text"]:focus, .contact input[type="email"]:focus, textarea:focus
+{
+    background-color: white;
+}
+
+main .texter
+{
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid lightblue;
+}
+
+main .contact .btn{
+    border-radius: 30px;
+    height: 50px
+}
+
+main .contact-flexbox
+{
+    display: flex;
+    justify-content: center;
+    align-content: stretch;
+}
+
+main .contact-flex-container
+{
+    width: 500px;
+    height: 550px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+main .item-1
+{
+    background-image: linear-gradient(to bottom right,#bad135, #445e1c);
+}
+
+main .item2::after
+{
+    content: "";
+    display: block;
+    height: 4px;
+    background-color: lightskyblue; 
+    width: 75px;
+
+}
+
+main .info
+{
+    padding: 10px;
+    font-size: 20px;
+}
+
+@media only screen and (max-width: 1100px) 
+{
+    main .contact-flexbox
+    {
+        flex-wrap: wrap;
+    }
 }

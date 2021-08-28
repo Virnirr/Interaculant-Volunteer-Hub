@@ -1,15 +1,13 @@
-import sqlite3
-from helper import dict_factory
+from dotenv import load_dotenv
+import os
+from flask_mail import Mail, Message
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
+load_dotenv()
 
 
-con = sqlite3.connect("volunteer.db")
-con.row_factory = dict_factory
-db = con.cursor()
+# My app
+app = Flask(__name__)
 
-services_created = db.execute("SELECT id, title, date, start_time, end_time, location, total_volunteer, available FROM services WHERE user_id = ?", [1]).fetchall()
-volunteer = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers WHERE user_id = ?", [1]).fetchall()
-
-print(services_created)
-
-con.commit()
-con.close()
+print(type(os.getenv("MAIL_USERNAME")))
+print(type(os.getenv("MAIL_DEFAULT_SENDER")))
+print(type(os.getenv("MAIL_PASSWORD")))

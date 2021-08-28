@@ -6,15 +6,28 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-
+from flask_mail import Mail, Message
 from helper import dict_factory, login_required
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # My app
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-# Ensure responses aren't cached
+# Configure emails
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_USE_TLS"] = True
+mail = Mail(app)
+
+# Ensure responses aren't cached    
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -81,33 +94,47 @@ def login():
     else:
         return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    con = sqlite3.connect("volunteer.db")
+    con.row_factory = dict_factory
+    db = con.cursor()
+
+    user = db.execute("SELECT username FROM users WHERE id=?", [session["user_id"]]).fetchall()
+
+    con.commit()
+    con.close()
+    # Forget any user_id
+    session.clear()
+
+    # Flash message for logout
+    flash("You have been logged out, " + user[0]['username'], "success")
+
+    # Redirect user to login form
+    return redirect("/")
+
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        
+        full_name = request.form.get("full_name")
+        email = request.form.get("email")
+        subject = request.form.get("subject")
+        message = request.form.get("message")
 
+        msg = Message(subject, recipients=[os.getenv("MAIL_HOME")])
+        msg.html = f"<p><b>{full_name} - {email} sent you this message.</b></p> <p>{message}</p>"
+        mail.send(msg)
+
+        flash("Successfully sent Message. We will get back to you as soon as possible", "success")
         return redirect("/contact")
 
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("contact.html")
-    
-
-@app.route("/logout")
-def logout():
-    """Log user out"""
-
-    # Flash message for logout
-    if "user_id" in session:
-        user = session["user_id"]
-        flash(f"You have been logged out, {user}", "info")
-
-    # Forget any user_id
-    session.clear()
-
-    # Redirect user to login form
-    return redirect("/")
         
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -233,6 +260,12 @@ def availability():
         results = {'processed': 'false'}
         return jsonify(results)
 
+    if spots < 0:
+        con.close()
+        flash("No more available spots for this service", "danger")
+        results = {'processed': 'false'}
+        return jsonify(results)
+
     user_username = db.execute("SELECT username FROM users WHERE id =?", [session["user_id"]]).fetchall()
     user_email = db.execute("SELECT email FROM users WHERE id =?", [session["user_id"]]).fetchall()
     service_title = db.execute("SELECT title FROM services WHERE id=?", (sev_id)).fetchall()
@@ -281,17 +314,44 @@ def service_management():
     return render_template("service_management.html", services_created = services_created, volunteers = volunteer)
 
 
-@app.route("/service_joined", methods=["GET"])
+@app.route("/service_joined", methods=["GET", "POST"])
 @login_required
 def service_joined():
 
-    con = sqlite3.connect("volunteer.db")
-    con.row_factory = dict_factory
-    db = con.cursor()
+    # if you receive a post request
+    if request.method == "POST":
+        
+        service_id = request.get_json()[0]['service_id']
+        user_id = request.get_json()[0]['user_id']
 
-    joined = db.execute("SELECT title, date, start_time, end_time, location from volunteers WHERE user_id =?", [session["user_id"]]).fetchall()
- 
-    con.commit()
-    con.close()
+        con = sqlite3.connect("volunteer.db")
+        con.row_factory = dict_factory
+        db = con.cursor()
 
-    return render_template("services_joined.html", joined = joined)
+        # Delete the service from from volunteer
+        try:
+            db.execute("DELETE FROM volunteers WHERE services_id = ? AND user_id = ?", (service_id, user_id))
+            results = {'processed': 'true'}
+            db.execute("UPDATE services SET available = available+1 WHERE id =?", (service_id))
+            flash("Successfully Removed!", "success")
+        except:
+            flash("Something went wrong", "danger")
+            results = {'processed': 'false'}
+        
+        con.commit()
+        con.close()
+
+        return jsonify(results)
+
+    # if you receive a get request
+    else: 
+        con = sqlite3.connect("volunteer.db")
+        con.row_factory = dict_factory
+        db = con.cursor()
+
+        joined = db.execute("SELECT services_id, user_id, title, date, start_time, end_time, location from volunteers WHERE user_id =?", [session["user_id"]]).fetchall()
+    
+        con.commit()
+        con.close()
+
+        return render_template("services_joined.html", joined = joined)
