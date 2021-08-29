@@ -40,7 +40,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Landing Page Route
-@app.route("/")
+@app.route("/", methods =["GET"])
 def home():
     return render_template("landing.html")
 
