@@ -119,41 +119,5 @@
             {% endfor %}
         </div>
     </section>
-    <script>
-        function availability(id)
-        {
-            var spots = document.getElementById(id);
-            var avail = parseInt(spots.innerHTML) - 1;
 
-            var server_data = [
-                {"spots": avail, "server_id": id}
-            ];
-
-
-            $.ajax({
-                type: "POST",
-                url: "/availability",
-                data: JSON.stringify(server_data),
-                contentType: "application/json",
-                dataType: 'json',   
-                success: function (result) {
-                    if(result.processed === "true") {
-                        window.location.reload(true);
-                        btn_id = "#" + id
-                        $(btn_id).html(avail);
-                        $(document).ready(function(){
-                            $(window).scrollTop(0);
-                        });
-                    }
-
-                    else if(result.processed === "false") {
-                        window.location.reload(true);
-                        $(document).ready(function(){
-                            $(window).scrollTop(0);
-                        });
-                    }
-                }
-            });
-        }
-    </script>
 {% endblock %}

@@ -1,13 +1,15 @@
 from functools import wraps
 from flask import redirect, session
 
+
+# function for getting a list of dictionary from sqlite
 def dict_factory(cursor, row):
     d = {}
     for idx,col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
 
-
+# login required function
 def login_required(f):
     """
     Decorate routes to require login.
