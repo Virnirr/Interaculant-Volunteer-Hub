@@ -170,7 +170,7 @@ def register():
 def services():
 
     # Database for rendering any created services
-    services = db.execute("SELECT * FROM services")
+    services = db.execute("SELECT * FROM services ORDER BY id DESC")
 
     return render_template("services.html", services=services)
 
