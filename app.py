@@ -1,4 +1,4 @@
-import sqlite3
+from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
@@ -17,9 +17,9 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Config for generating default email settings
-app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_USE_TLS"] = True
@@ -39,6 +39,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+#CS50 query
+db = SQL(os.getenv("DATABASE_URL"))
+
 # Landing Page Route
 @app.route("/", methods =["GET"])
 def home():
@@ -55,40 +58,24 @@ def login():
         password = request.form.get("password")
         
         # Query database for username
-        con = sqlite3.connect("volunteer.db")
-        con.row_factory = dict_factory
-        db = con.cursor()
-
-        rows = db.execute("SELECT * FROM users WHERE email=?", [email]).fetchall()
+        rows = db.execute("SELECT * FROM users WHERE email=?", email)
 
         # Ensure that email and password exist
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
-            con.close()
             flash("Invalid Email and/or Password", "danger")
             return redirect("/login")
         
-        con.commit()
-        con.close()
-
         # Forget any user_id
         session.clear()
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        con = sqlite3.connect("volunteer.db")
-        con.row_factory = dict_factory
-        db = con.cursor()
-
-        rows1 = db.execute("SELECT username FROM users WHERE id=?", [session["user_id"]]).fetchall()
+        rows1 = db.execute("SELECT username FROM users WHERE id=?", session["user_id"])
 
         # Redirect user to home page
         flash("Login Successfully! Welcome " + rows1[0]['username'], "info")
-        
-        # Commit and Close sqlite
-        con.commit()
-        con.close()
-        
+
         # Redirect to service route
         return redirect("/services")
 
@@ -100,14 +87,9 @@ def login():
 @app.route("/logout")
 def logout():
     """Log user out"""
-    con = sqlite3.connect("volunteer.db")
-    con.row_factory = dict_factory
-    db = con.cursor()
 
-    user = db.execute("SELECT username FROM users WHERE id=?", [session["user_id"]]).fetchall()
+    user = db.execute("SELECT username FROM users WHERE id=?", session["user_id"])
 
-    con.commit()
-    con.close()
     # Forget any user_id
     session.clear()
 
@@ -153,35 +135,26 @@ def register():
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
-        
+
         # Logs user into database
-        con = sqlite3.connect("volunteer.db")
-        db = con.cursor()
-        
-        rows = db.execute("SELECT * FROM users WHERE username = ?", [username]).fetchall()
-        email_check = db.execute("SELECT * FROM users WHERE email = ?", [email]).fetchall()
+        rows = db.execute("SELECT * FROM users WHERE username = ?",username)
+        email_check = db.execute("SELECT * FROM users WHERE email = ?",email)
 
         # Check if Username is taken or not
         if len(rows) != 0:
-            con.close()
             flash("Username Already Taken!", "danger")
             return redirect("/register")
         
         # Check if Email is taken or not
         if len(email_check) != 0:
-            con.close()
             flash("Email Already Taken!", "danger")
             return redirect("/register")
         
         # Create a hashed password based on sha256 hashing function and store it into database
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
         db.execute("INSERT INTO users(email, username, hash) VALUES(?, ?, ?)", 
-                          [email, username, hashed_password])
+                          email, username, hashed_password)
         
-        # Commit and Close database
-        con.commit()
-        con.close()
-
         # Reddirect user back to login page after registering
         
         flash("Register Successfully!", "success")
@@ -197,14 +170,7 @@ def register():
 def services():
 
     # Database for rendering any created services
-    con = sqlite3.connect("volunteer.db")
-    con.row_factory = dict_factory
-    db = con.cursor()
-
-    services = db.execute("SELECT * FROM services").fetchall()
-    
-    con.commit()
-    con.close()
+    services = db.execute("SELECT * FROM services")
 
     return render_template("services.html", services=services)
 
@@ -227,22 +193,15 @@ def create_service():
         instructions = request.form.get("instructions")
         
         # Database Query for creating a new service
-        con = sqlite3.connect("volunteer.db")
-        con.row_factory = dict_factory
-        db = con.cursor()
-
-        user_username = db.execute("SELECT username FROM users WHERE id =?", [session["user_id"]]).fetchall()
-        user_email = db.execute("SELECT email FROM users WHERE id =?", [session["user_id"]]).fetchall()
+        user_username = db.execute("SELECT username FROM users WHERE id =?", session["user_id"])
+        user_email = db.execute("SELECT email FROM users WHERE id =?", session["user_id"])
         
         u_name= user_username[0]["username"]
         u_email =  user_email[0]["email"]
 
         # Insert all the data from the form into services database
         db.execute("INSERT INTO services (user_id, theme, title, host_username, host_email, date, start_time, end_time, location, total_volunteer, available, instruction) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-        (session['user_id'], event_themes, event_title, u_name, u_email, event_date, start_time, end_time, event_location, total_volunteer, total_volunteer, instructions))
-        
-        con.commit()
-        con.close()
+                    session['user_id'], event_themes, event_title, u_name, u_email, event_date, start_time, end_time, event_location, total_volunteer, total_volunteer, instructions)
 
         # Redirect to services page
         flash("Service Successfully Made!", "success")
@@ -269,34 +228,28 @@ def availability():
     sev_id = request.get_json()[0]['server_id']
 
     # Database Query
-    con = sqlite3.connect("volunteer.db")
-    con.row_factory = dict_factory
-    db = con.cursor()
-
-    volunteer = db.execute("SELECT services_id FROM volunteers WHERE user_id = ? AND services_id=?", (session["user_id"], sev_id)).fetchall()
+    volunteer = db.execute("SELECT services_id FROM volunteers WHERE user_id = ? AND services_id=?", session["user_id"], sev_id)
 
     # Check if the users has already signed up for the service or not
     if len(volunteer) != 0:
-        con.close()
         flash("Already Signed Up for that Service", "danger")
         results = {'processed': 'false'}
         return jsonify(results)
 
     # Check if there is no spots left for that particular service
     if spots < 0:
-        con.close()
         flash("No more available spots for this service", "danger")
         results = {'processed': 'false'}
         return jsonify(results)
 
     # All informations of the services database in a list of dictionary
-    user_username = db.execute("SELECT username FROM users WHERE id =?", [session["user_id"]]).fetchall()
-    user_email = db.execute("SELECT email FROM users WHERE id =?", [session["user_id"]]).fetchall()
-    service_title = db.execute("SELECT title FROM services WHERE id=?", (sev_id)).fetchall()
-    service_date = db.execute("SELECT date FROM services WHERE id=?", (sev_id)).fetchall()
-    service_start = db.execute("SELECT start_time FROM services WHERE id=?", (sev_id)).fetchall()
-    service_end = db.execute("SELECT end_time FROM services WHERE id=?", (sev_id)).fetchall()
-    service_location = db.execute("SELECT location FROM services WHERE id=?", (sev_id)).fetchall()
+    user_username = db.execute("SELECT username FROM users WHERE id =?", session["user_id"])
+    user_email = db.execute("SELECT email FROM users WHERE id =?", session["user_id"])
+    service_title = db.execute("SELECT title FROM services WHERE id=?", sev_id)
+    service_date = db.execute("SELECT date FROM services WHERE id=?", sev_id)
+    service_start = db.execute("SELECT start_time FROM services WHERE id=?", sev_id)
+    service_end = db.execute("SELECT end_time FROM services WHERE id=?", sev_id)
+    service_location = db.execute("SELECT location FROM services WHERE id=?", sev_id)
     
     # Taking in the values of the dictionary and store them in a variable
     u_name = user_username[0]["username"]
@@ -310,16 +263,13 @@ def availability():
     # Try to Insert and Update the datas in services and volunteer database. If something went wrong during the process, flash "Something went wrong"
     try:
         db.execute("INSERT INTO volunteers (services_id, user_id, volunteer_username, volunteer_email, title, date, start_time, end_time, location) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? )",
-                    (sev_id, session["user_id"], u_name, u_email, sev_title, sev_date, sev_start, sev_end, sev_location))
-        db.execute("UPDATE services SET available=? WHERE id=?", (spots, sev_id))
+                    sev_id, session["user_id"], u_name, u_email, sev_title, sev_date, sev_start, sev_end, sev_location)
+        db.execute("UPDATE services SET available=? WHERE id=?", spots, sev_id)
         results = {'processed': 'true'}
         flash("Signed up Successfull!", "success")
     except:
         flash("Something went wrong", "danger")
         results = {'processed': 'false'}
-        
-    con.commit()
-    con.close()
 
     # Return a jsonify version of the result. Either "true" for correctly updating or "false" for an internal problem
     return jsonify(results)
@@ -330,15 +280,8 @@ def availability():
 def service_management():
 
     # Database Query for all the services and volunteer for signed up for the services
-    con = sqlite3.connect("volunteer.db")
-    con.row_factory = dict_factory
-    db = con.cursor()
-
-    services_created = db.execute("SELECT id, title, date, start_time, end_time, location, total_volunteer, available FROM services WHERE user_id = ?", [session["user_id"]]).fetchall()
-    volunteer = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers WHERE user_id = ?", [session["user_id"]]).fetchall()
-
-    con.commit()
-    con.close()
+    services_created = db.execute("SELECT id, title, date, start_time, end_time, location, total_volunteer, available FROM services WHERE user_id = ?", session["user_id"])
+    volunteer = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers WHERE user_id = ?", session["user_id"])
 
     # Rendering in all the services created by the user and its volunteers
     return render_template("service_management.html", services_created = services_created, volunteers = volunteer)
@@ -354,34 +297,20 @@ def service_joined():
         service_id = request.get_json()[0]['service_id']
         user_id = request.get_json()[0]['user_id']
 
-        con = sqlite3.connect("volunteer.db")
-        con.row_factory = dict_factory
-        db = con.cursor()
-
         # Delete the service from from volunteer
         try:
-            db.execute("DELETE FROM volunteers WHERE services_id = ? AND user_id = ?", (service_id, user_id))
+            db.execute("DELETE FROM volunteers WHERE services_id = ? AND user_id = ?", service_id, user_id)
             results = {'processed': 'true'}
-            db.execute("UPDATE services SET available = available+1 WHERE id =?", (service_id))
+            db.execute("UPDATE services SET available = available+1 WHERE id =?", service_id)
             flash("Successfully Removed!", "success")
         except:
             flash("Something went wrong", "danger")
             results = {'processed': 'false'}
-        
-        con.commit()
-        con.close()
 
         return jsonify(results)
 
     # if you receive a get request, render in all the joined services
     else: 
-        con = sqlite3.connect("volunteer.db")
-        con.row_factory = dict_factory
-        db = con.cursor()
-
-        joined = db.execute("SELECT services_id, user_id, title, date, start_time, end_time, location from volunteers WHERE user_id =?", [session["user_id"]]).fetchall()
-    
-        con.commit()
-        con.close()
+        joined = db.execute("SELECT services_id, user_id, title, date, start_time, end_time, location from volunteers WHERE user_id =?", session["user_id"])
 
         return render_template("services_joined.html", joined = joined)
