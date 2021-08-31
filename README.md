@@ -8,6 +8,12 @@
 
 This project is based upon creating and joining volunteer services across the world.
 
+## Table of Contents:
+- [Description](https://github.com/Virnirr/Interaculant-Volunteer-Hub#description)
+- [Technologies](https://github.com/Virnirr/Interaculant-Volunteer-Hub#motivation)
+- [what I learned](https://github.com/Virnirr/Interaculant-Volunteer-Hub#what-i-learned)
+- [Thank you!](https://github.com/Virnirr/Interaculant-Volunteer-Hub#thank-you)
+
 ## Description
 
 This project is a web application that is built to connect communities, non-profit organizations, etc., with volunteers in their communities and around the world. How this project functions is that a user sign in the website by setting an email(for others to contact), username, and a password for security (passwords are hashed with sha256). After signing in, users are taken to "Service" page, where they can freely view and sign up for any particular services that they are interested in. After signing up for a particular service, the service informations are stored in a database that is only viewable by the user who signed up. The user will also be able to remove any service that they do not plan to attend. Users can additionally create new services in the "Create Services" tab where they can enter informations related to their service including title, date, start time, end time, total volunteer needed, and a little description/instruction for the service. The service will then be stored into a database and generated into "Services" tab, where it will be public for every users. Users will be able to track their created services with each volunteer who signed up for the every particular services.
