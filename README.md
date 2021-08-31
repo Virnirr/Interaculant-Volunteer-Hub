@@ -62,7 +62,7 @@ I used Python and Flask for my back-end development which allows me to receive d
 
 CS50 SQL/Postgres
 
-I used CS50 SQP to execute and query my SQL commands while using Postgres to store all my datas.
+I used CS50 SQL to execute and query my SQL commands while using Postgres to store all my datas.
 
 ## What I learned
 
