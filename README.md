@@ -11,7 +11,7 @@ This project is based upon creating and joining volunteer services across the wo
 ## Table of Contents:
 - [Description](https://github.com/Virnirr/Interaculant-Volunteer-Hub#description)
 - [Technologies](https://github.com/Virnirr/Interaculant-Volunteer-Hub#motivation)
-- [what I learned](https://github.com/Virnirr/Interaculant-Volunteer-Hub#what-i-learned)
+- [What I Learned](https://github.com/Virnirr/Interaculant-Volunteer-Hub#what-i-learned)
 - [Thank you!](https://github.com/Virnirr/Interaculant-Volunteer-Hub#thank-you)
 
 ## Description
