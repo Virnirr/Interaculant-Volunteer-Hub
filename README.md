@@ -3,7 +3,8 @@
 [![Python](https://img.shields.io/badge/Python-3.9.6-21455f?logo=python&labelColor=21455f)](https://www.python.org/)
 [![HTML5](https://img.shields.io/badge/HTML5-orange?logo=HTML5&labelColor=orange)](https://html.com/)
 [![CSS](https://img.shields.io/badge/CSS3-darkgreen?logo=CSS3&labelColor=darkgreen)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![CSS](https://img.shields.io/badge/JavaScript-yellow?logo=JavaScript&labelColor=darkyellow)](https://html.com/)
+[![CSS](https://img.shields.io/badge/JavaScript-yellow?logo=JavaScript&labelColor=darkyellow)](https://www.w3schools.com/js/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-purple?logo=Bootstrap&labelColor=purple)](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Virnirr/Interaculant-Volunteer-Hub/blob/main/LICENSE)
 
 This project is based upon creating and joining volunteer services across the world.
@@ -39,6 +40,7 @@ I used CS50 SQP to execute and query my SQL commands while using Postgres to sto
 ## What I learned
 
 - HTML/CSS/JavaScript
+- Bootstrap CSS Framework
 - Python
 - Git & Github
 - Flask
