@@ -11,6 +11,7 @@ This project is based upon creating and joining volunteer services across the wo
 
 ## Table of Contents:
 - [Description](https://github.com/Virnirr/Interaculant-Volunteer-Hub#description)
+- [Features](https://github.com/Virnirr/Interaculant-Volunteer-Hub#features)
 - [Technologies](https://github.com/Virnirr/Interaculant-Volunteer-Hub#technologies)
 - [What I Learned](https://github.com/Virnirr/Interaculant-Volunteer-Hub#what-i-learned)
 - [Thank you!](https://github.com/Virnirr/Interaculant-Volunteer-Hub#thank-you)
@@ -18,6 +19,32 @@ This project is based upon creating and joining volunteer services across the wo
 ## Description
 
 This project is a responsive web application that is built to connect communities, non-profit organizations, etc., with volunteers in their communities and around the world. How this project functions is that a user sign in the website by setting an email(for others to contact), username, and a password for security (passwords are hashed with sha256). After signing in, users are taken to "Service" page, where they can freely view and sign up for any particular services that they are interested in. After signing up for a particular service, the service informations are stored in a database that is only viewable by the user who signed up. The user will also be able to remove any service that they do not plan to attend. Users can additionally create new services in the "Create Services" tab where they can enter informations related to their service including title, date, start time, end time, total volunteer needed, and a little description/instruction for the service. The service will then be stored into a database and generated into "Services" tab, where it will be public for every users. Users will be able to track their created services with each volunteer who signed up for the every particular services.
+
+## Features
+
+- Landing:
+
+When a user first enters my web application, they are greeted with a message and "Get Started" button which will take them to my register page. Furthermore, the landing page also shows my project's motto, which is "Service Before Self." Additionally I have included an "About Me" section in my landing page which talks a little about the inspiration I got for my web application. 
+
+- Contact:
+
+In the contact page, users can contact me with the informations on the right, provided by me. However, they can also contact me by entering in their full name, email address (so that I'm able to contact back), and any messages that they would like to get across. After press the "Contact" button, a message will be sent directly to my email.
+
+- Register and Login: 
+
+In the register page, users (communities, non-profit organizations, and volunteers) will be able to register an account by entering their preferred username, email, password, and a confirming password. Passwords will be hashed with sha256 function for security purposes. After registration, user will be redirected to the login page where they will enter their informations.
+
+- Services:
+
+In the service tab, users can freely browse all the created services by others. After the user has found a service that they would like to volunteer for, they can press the "Sign Up" button to take up an available spot. The users information will then be stored into a database. Users can view all their joined services in the "Services Joined" Tab. After the available spot drops down to 0, users will not be able to sign up for that particular service until an available spot is opened. 
+
+- Create Service:
+
+In the Create Service tab, users can create a service by choosing a theme (currently only have three themes, Celebration, Foodie, and Education) for their service, a title, a date, a start and end time, location, maximum volunteer, and a little instruction or description of the service. After the user has inputted on the required informations and posted the service, it will then be stored into a database and generated into the Service tab, where it will be public to all other users. 
+
+- Services Joined:
+
+In the Services tab, users will be able to view all their joined services in a table, which will show every services, their title, their date, their start and end time, and their locations. Users will also be able to remove any services that they do not intend to volunteer at or decides not to.
 
 ## Motivation
 
