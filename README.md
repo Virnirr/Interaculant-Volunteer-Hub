@@ -1,2 +1,2 @@
-# Ineraculant - Volunteer Hub
+# Interaculant - Volunteer Hub
 ## Github Testing
