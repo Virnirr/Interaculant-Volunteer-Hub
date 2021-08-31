@@ -281,10 +281,10 @@ def service_management():
 
     # Database Query for all the services and volunteer for signed up for the services
     services_created = db.execute("SELECT id, title, date, start_time, end_time, location, total_volunteer, available FROM services WHERE user_id = ?", session["user_id"])
-    volunteer = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers WHERE user_id = ?", session["user_id"])
+    volunteers = db.execute("SELECT services_id, volunteer_username, volunteer_email FROM volunteers")
 
     # Rendering in all the services created by the user and its volunteers
-    return render_template("service_management.html", services_created = services_created, volunteers = volunteer)
+    return render_template("service_management.html", services_created = services_created, volunteers = volunteers)
 
 # Route to check all the services you have joined and remove any that you do not intend to go
 @app.route("/service_joined", methods=["GET", "POST"])
